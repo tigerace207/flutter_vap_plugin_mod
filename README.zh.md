@@ -81,6 +81,9 @@ class MyApp extends StatelessWidget {
           child: FlutterVapView(
             controller: vapController,
             scaleType: VapScaleType.fitXY,
+            onCreateView: () {
+              // 现在可以在这里播放
+            },
             onVideoStart: () {
               debugPrint('VAP - 视频开始播放');
             },

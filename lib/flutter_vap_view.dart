@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ class FlutterVapView extends StatefulWidget {
     this.onVideoRender,
     this.onFailed,
     this.scaleType = VapScaleType.fitXY,
+    this.onCreateView,
   });
 
   /// 外部控制器，必填
@@ -43,6 +45,9 @@ class FlutterVapView extends StatefulWidget {
   /// Video scaling type, default is fitXY
   final VapScaleType scaleType;
 
+  // 用于PlatformView创建完成后的回调
+  final VoidCallback? onCreateView;
+
   @override
   State<FlutterVapView> createState() => _FlutterVapViewState();
 }
@@ -60,6 +65,7 @@ class _FlutterVapViewState extends State<FlutterVapView> {
     _channel = MethodChannel('flutter_vap_plugin_$id');
     _channel?.setMethodCallHandler(_handleMethodCall);
     widget.controller.bindChannel(_channel!);
+    widget.onCreateView.call();
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
