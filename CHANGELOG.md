@@ -2,6 +2,7 @@
 
 * expose an api when platfromView created
 * Add support for Google's 16KB requirement
+* Finished migration to UIScene lifecycle. See https://flutter.dev/to/uiscene-migration for details.
 
 ## 0.1.5
 
