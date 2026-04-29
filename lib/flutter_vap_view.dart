@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,18 +24,23 @@ class FlutterVapView extends StatefulWidget {
 
   /// 外部控制器，必填
   final FlutterVapController controller;
+
   // Callback when video starts playing
   // 视频开始播放回调
   final VapCallback? onVideoStart;
+
   // Callback when video playback completes
   // 视频播放完成回调
   final VapCallback? onVideoFinish;
+
   // Callback when video is destroyed
   // 视频销毁回调
   final VapCallback? onVideoDestroy;
+
   // Callback for each rendered frame, returns current frame index
   // 渲染帧回调，返回当前帧索引
   final VapFrameCallback? onVideoRender;
+
   // Callback when playback fails, returns error type and message
   // 播放失败回调，返回错误类型和信息
   final VapErrorCallback? onFailed;
@@ -65,7 +69,7 @@ class _FlutterVapViewState extends State<FlutterVapView> {
     _channel = MethodChannel('flutter_vap_plugin_$id');
     _channel?.setMethodCallHandler(_handleMethodCall);
     widget.controller.bindChannel(_channel!);
-    widget.onCreateView.call();
+    widget.onCreateView?.call();
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {

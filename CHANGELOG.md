@@ -1,3 +1,8 @@
+## 0.1.6
+
+* expose an api when platfromView created
+* Add support for Google's 16KB requirement
+
 ## 0.1.5
 
 * Change deleteOnEnd argument type to Boolean

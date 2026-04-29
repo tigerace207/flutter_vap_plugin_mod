@@ -13,8 +13,9 @@ import io.flutter.plugin.platform.PlatformViewFactory
  * @date 2025/5/27 16:08
  */
 class FlutterVapViewFactory(private val messenger: BinaryMessenger) : PlatformViewFactory(
-    StandardMessageCodec.INSTANCE) {
+    StandardMessageCodec.INSTANCE
+) {
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-        return FlutterVapView(context, messenger, viewId,args)
+        return FlutterVapView(context, messenger, viewId, args)
     }
 }

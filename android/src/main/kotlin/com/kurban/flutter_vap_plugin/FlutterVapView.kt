@@ -26,7 +26,7 @@ class FlutterVapView(
     private val context: Context,
     messenger: BinaryMessenger,
     viewId: Int,
-    args: Any? ,
+    args: Any?,
 ) : PlatformView, IAnimListener {
 
     private var animView: AnimView = AnimView(context)
@@ -35,7 +35,7 @@ class FlutterVapView(
     private var lastPlayedFile: File? = null
     private var destroyed = false
     private var deleteOnEnd = false
-    private  var scaleType:ScaleType=ScaleType.FIT_XY
+    private var scaleType: ScaleType = ScaleType.FIT_XY
 
     init {
         // 设置视图布局参数，使其撑满父容器
@@ -66,18 +66,19 @@ class FlutterVapView(
                         result.success(animView.isRunning())
                     }, 100)
                 }
+
                 "play" -> {
                     val path = (call.argument<String>("path"))
                     val sourceType = (call.argument<String>("sourceType"))
                     val repeatCount = call.argument<Int>("repeatCount") ?: 1
                     val delete = call.argument<Boolean>("deleteOnEnd") ?: true
                     if (path != null && sourceType != null) {
-                        if (animView.isRunning()){
+                        if (animView.isRunning()) {
                             animView.stopPlay()
                             Handler(Looper.getMainLooper()).postDelayed({
                                 playWithParams(path, sourceType, repeatCount, delete)
                             }, 100)
-                        }else{
+                        } else {
                             playWithParams(path, sourceType, repeatCount, delete)
                         }
 
@@ -85,6 +86,7 @@ class FlutterVapView(
                     }
                     result.success(null)
                 }
+
                 else -> result.notImplemented()
             }
         }
@@ -109,10 +111,12 @@ class FlutterVapView(
         } catch (e: Exception) {
             Log.e("FlutterVapView", "Failed to load asset: $assetPath", e)
             mainHandler.post {
-                methodChannel.invokeMethod("onFailed", mapOf(
-                    "errorType" to -1,
-                    "errorMsg" to "Failed to load asset: ${e.message}"
-                ))
+                methodChannel.invokeMethod(
+                    "onFailed", mapOf(
+                        "errorType" to -1,
+                        "errorMsg" to "Failed to load asset: ${e.message}"
+                    )
+                )
             }
             return null
         }
@@ -132,6 +136,7 @@ class FlutterVapView(
                         onFailed(-1, "File does not exist: $path")
                     }
                 }
+
                 "asset" -> {
                     loadAsset(path)?.let { file ->
                         try {
@@ -144,6 +149,7 @@ class FlutterVapView(
                         }
                     }
                 }
+
                 else -> {
                     onFailed(-1, "Unsupported source type: $sourceType")
                 }
@@ -161,8 +167,8 @@ class FlutterVapView(
         try {
             animView.stopPlay()
             methodChannel.setMethodCallHandler(null)
-            if(deleteOnEnd == true){
-                lastPlayedFile?.delete() // 清理最后播放的临时文件
+            if (deleteOnEnd) {
+                lastPlayedFile?.delete()
             }
         } catch (e: Exception) {
             Log.e("FlutterVapView", "Error during dispose", e)
@@ -201,10 +207,12 @@ class FlutterVapView(
 
     override fun onFailed(errorType: Int, errorMsg: String?) {
         mainHandler.post {
-            methodChannel.invokeMethod("onFailed", mapOf(
-                "errorType" to errorType,
-                "errorMsg" to (errorMsg ?: "")
-            ))
+            methodChannel.invokeMethod(
+                "onFailed", mapOf(
+                    "errorType" to errorType,
+                    "errorMsg" to (errorMsg ?: "")
+                )
+            )
         }
     }
 }
